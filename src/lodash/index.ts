@@ -1,8 +1,5 @@
 import _ from "lodash";
-
-export function isDefined<T>(value: T | undefined): value is T {
-  return value !== undefined;
-}
+import { isDefined } from "./isDefined";
 
 _.mixin({ isDefined });
 

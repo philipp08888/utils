@@ -18,6 +18,9 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "repository": {
+    "url": "https://github.com/philipp08888/utils"
+  },
   "types": "dist/index.d.ts",
   "keywords": [],
   "author": "philipp08888 <admin@philipp08888.dev>",

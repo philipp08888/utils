@@ -11,9 +11,20 @@ export default defineConfig([
   },
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
-    ignores: ["./dist/*", "./node_modules/*"],
     languageOptions: { globals: globals.browser },
   },
   globalIgnores(["dist/**"]),
   tseslint.configs.recommended,
+  {
+    files: ["**/*.{ts,mts,cts}"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+        },
+      ],
+    },
+  },
 ]);

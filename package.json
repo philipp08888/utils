@@ -20,7 +20,8 @@
     }
   },
   "repository": {
-    "url": "git+https://github.com/philipp08888/utils.git"
+    "type": "git",
+    "url": "https://github.com/philipp08888/utils.git"
   },
   "types": "dist/index.d.ts",
   "keywords": [],
@@ -52,5 +53,8 @@
   },
   "dependencies": {
     "lodash": "^4.17.21"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

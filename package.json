@@ -20,7 +20,7 @@
     }
   },
   "repository": {
-    "url": "https://github.com/philipp08888/utils"
+    "url": "git+https://github.com/philipp08888/utils.git"
   },
   "types": "dist/index.d.ts",
   "keywords": [],

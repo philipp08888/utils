@@ -14,7 +14,7 @@ import { Result } from "../src";
   abstract unwrapOr(defaultValue: V): V; check
   abstract unwrapErr(): E; check
 
-  abstract map<U>(fn: (value: V) => U): Result<E, U>;
+  abstract map<U>(fn: (value: V) => U): Result<E, U>; check
   abstract flatMap<U>(fn: (value: V) => Result<E, U>): Result<E, U>;
   abstract mapOnError<F>(fn: (error: E) => F): Result<F, V>;
  */
@@ -77,6 +77,18 @@ describe("Result Monad", () => {
       expect(result.isSuccess()).toBe(true);
       expect(result.unwrapOr(8)).toBe(18);
     });
+
+    it("should apply the function return Success with transformed value", () => {
+      const result = Result.success<Error, string>("Klaus");
+      const transformFn = jest.fn((value: string) => value.toUpperCase());
+
+      const mappedResult = result.map(transformFn);
+
+      expect(mappedResult.isSuccess()).toBe(true);
+      expect(mappedResult.unwrap()).toBe("KLAUS");
+      expect(transformFn).toHaveBeenCalledWith("Klaus");
+      expect(transformFn).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe("Failure", () => {
@@ -132,6 +144,18 @@ describe("Result Monad", () => {
 
       expect(result.isFailure()).toBe(true);
       expect(result.unwrapOr(8)).toBe(8);
+    });
+
+    it("should not apply the function and return failure", () => {
+      const error = new Error("Error");
+      const result = Result.failure<Error, string>(error);
+      const transformFn = jest.fn((value: string) => value.toUpperCase());
+
+      const mappedResult = result.map(transformFn);
+
+      expect(mappedResult.isFailure()).toBe(true);
+      expect(mappedResult.unwrapErr()).toBe(error);
+      expect(transformFn).not.toHaveBeenCalled();
     });
   });
 });

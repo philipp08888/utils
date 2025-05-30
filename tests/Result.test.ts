@@ -1,24 +1,6 @@
 import { Result } from "../src";
 
-/**
- * abstract readonly _tag: "SUCCESS" | "FAILURE";
-
-  abstract isSuccess(): this is Success<E, V>;
-  abstract isFailure(): this is Failure<E, V>;
-
-  abstract getOrUndefined(): V | undefined; check
-  abstract getOrNull(): V | null; check
-  abstract getOrElse(fn: () => V): V; check
-
-  abstract unwrap(): V; check
-  abstract unwrapOr(defaultValue: V): V; check
-  abstract unwrapErr(): E; check
-
-  abstract map<U>(fn: (value: V) => U): Result<E, U>; check
-  abstract flatMap<U>(fn: (value: V) => Result<E, U>): Result<E, U>;
-  abstract mapOnError<F>(fn: (error: E) => F): Result<F, V>;
- */
-
+// TODO: add test for #flatMap and #mapOnError
 describe("Result Monad", () => {
   describe("Success", () => {
     const obj = {

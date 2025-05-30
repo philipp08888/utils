@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/philipp08888/utils/compare/v1.0.0...v1.1.0) (2025-05-30)
+
+
+### Features
+
+* add Result tests ([#6](https://github.com/philipp08888/utils/issues/6)) ([c4af8f4](https://github.com/philipp08888/utils/commit/c4af8f4eaa3c1b6c82a2a069f3a0b3642c82eed4))
+
 # 1.0.0 (2025-05-30)
 
 

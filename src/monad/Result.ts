@@ -1,15 +1,54 @@
 abstract class ResultBase<E, V> {
+  /**
+   * Discriminator property to distinguish between success and failure states.
+   */
   abstract readonly _tag: "SUCCESS" | "FAILURE";
 
+  /**
+   * Type guard to check if this result represents a successful operation.
+   */
   abstract isSuccess(): this is Success<E, V>;
+
+  /**
+   * Type guard to check if this result represents a failed operation.
+   */
   abstract isFailure(): this is Failure<E, V>;
 
+  /**
+   * Safely extracts the value from a successful result, returning undefined for failures.
+   */
   abstract getOrUndefined(): V | undefined;
+
+  /**
+   * Safely extracts the value from a successful result, returning null for failures.
+   */
   abstract getOrNull(): V | null;
+
+  /**
+   * Safely extracts the value from a successful result, or computes a default value for failures.
+   * @param fn - Function that provides the default value
+   */
   abstract getOrElse(fn: () => V): V;
 
+  /**
+   * Extracts the value from a successful result, throwing an error for failures.
+   * Use with caution - prefer safer alternatives like getOrElse() when possible.
+   */
   abstract unwrap(): V;
+
+  /**
+   * Extracts the value from a successful result, or returns a default value for failures.
+   * @param defaultValue
+   * @returns {V}
+   */
   abstract unwrapOr(defaultValue: V): V;
+
+  /**
+   * Extracts the error from a failed result, throwing an error for successes.
+   * Use with caution - ensure you've checked isFailure() first.
+   *
+   * @returns {E} The wrapped error
+   */
   abstract unwrapErr(): E;
 
   abstract map<U>(fn: (value: V) => U): Result<E, U>;

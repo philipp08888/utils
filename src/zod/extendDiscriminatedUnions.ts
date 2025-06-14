@@ -16,13 +16,15 @@ export function extendDiscriminatedUnions<
   extendUnion: (
     value: z.ZodDiscriminatedUnionOption<Discriminator>
   ) => z.ZodObject<ZodRawShape>
-) {
-  const options = discriminatedUnion.optionsMap;
-  // optionsMap loses type info, so we assert the correct generic type here.
-  // Safe because all options come from the same discriminatedUnion.
-  const updatedOptions = Array.from(options).map(([_, v]) =>
-    extendUnion(v as z.ZodDiscriminatedUnionOption<Discriminator>)
-  );
+): z.ZodDiscriminatedUnion<
+  Discriminator,
+  [
+    z.ZodDiscriminatedUnionOption<Discriminator>,
+    ...z.ZodDiscriminatedUnionOption<Discriminator>[]
+  ]
+> {
+  const options = discriminatedUnion.options;
+  const updatedOptions = Array.from(options).map((u) => extendUnion(u));
 
   return z.discriminatedUnion(
     discriminatedUnion.discriminator,

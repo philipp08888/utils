@@ -1,4 +1,4 @@
-import { Result } from "../src";
+import { Result } from "..";
 
 // TODO: add test for #flatMap and #mapOnError
 describe("Result Monad", () => {

@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/philipp08888/utils/compare/v1.1.0...v1.2.0) (2025-06-14)
+
+
+### Features
+
+* add extendDiscriminatedUnions function ([#7](https://github.com/philipp08888/utils/issues/7)) ([45f7473](https://github.com/philipp08888/utils/commit/45f7473834feca03cc2da8a3100ec609f41d1ac0))
+
 # [1.1.0](https://github.com/philipp08888/utils/compare/v1.0.0...v1.1.0) (2025-05-30)
 
 

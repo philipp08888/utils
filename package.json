@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.21",
+    "undici": "^7.16.0",
     "zod": "^3.25.64"
   },
   "publishConfig": {

@@ -13,6 +13,10 @@ export async function safeRequest<T = null>(url: string | URL | UrlObject, optio
       return Result.failure(error);
     }
 
-    return Result.failure(error as Error);
+    if (error instanceof Error) {
+      return Result.failure(error);
+    }
+
+    return Result.failure(new Error(`Unknown error: ${String(error)}`));
   }
 }

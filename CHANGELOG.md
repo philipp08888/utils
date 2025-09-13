@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/philipp08888/utils/compare/v1.2.0...v1.3.0) (2025-09-13)
+
+
+### Features
+
+* add safeRequest fn ([#8](https://github.com/philipp08888/utils/issues/8)) ([b064d92](https://github.com/philipp08888/utils/commit/b064d9248137da2325cec7ef9f8bf4eaf0ce9e18))
+
 # [1.2.0](https://github.com/philipp08888/utils/compare/v1.1.0...v1.2.0) (2025-06-14)
 
 

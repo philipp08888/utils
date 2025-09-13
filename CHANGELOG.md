@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/philipp08888/utils/compare/v1.3.0...v1.3.1) (2025-09-13)
+
+
+### Bug Fixes
+
+* export request module ([#9](https://github.com/philipp08888/utils/issues/9)) ([8242dfe](https://github.com/philipp08888/utils/commit/8242dfe046f48b745cdb12a60474f2f7ccccb741))
+
 # [1.3.0](https://github.com/philipp08888/utils/compare/v1.2.0...v1.3.0) (2025-09-13)
 
 

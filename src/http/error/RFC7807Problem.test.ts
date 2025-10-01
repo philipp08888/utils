@@ -2,7 +2,7 @@ import {RFC7807Problem} from "./RFC7807Problem";
 import {StatusCodes} from "http-status-codes";
 
 describe("RFC7807Problem", () => {
-    it("should serializes to JSON correctly", () => {
+    it("should serialize to JSON correctly", () => {
         const exampleError = new RFC7807Problem({
             status: StatusCodes.FORBIDDEN,
             title: "Forbidden",

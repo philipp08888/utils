@@ -9,7 +9,7 @@ export interface RFC7807Options {
     status?: StatusCodes;
     detail?: string;
     instance?: string;
-    /* Explicit override for Error.message */
+    // Explicit override for Error.message
     message?: string;
 }
 

@@ -1,66 +1,107 @@
-import {RFC7807Problem} from "./RFC7807Problem";
 import {StatusCodes} from "http-status-codes";
+import {BadRequestError} from "./BadRequestError";
+import {RFC7807Problem, isRFC7807Problem} from "./RFC7807Problem";
+
+// Test subclass with additional fields
+class CustomError extends RFC7807Problem {
+    public readonly type = 'BAD_REQUEST_ERROR' as const;
+    public readonly status = StatusCodes.BAD_REQUEST as const;
+    public readonly title = "Custom Error" as const;
+    public readonly customField: string;
+    public readonly customNumber: number;
+
+    constructor(customField: string, customNumber: number, detail?: string, instance?: string) {
+        super(detail, instance);
+        this.customField = customField;
+        this.customNumber = customNumber;
+    }
+}
 
 describe("RFC7807Problem", () => {
-    it("should serialize to JSON correctly", () => {
-        const exampleError = new RFC7807Problem({
-            status: StatusCodes.FORBIDDEN,
-            title: "Forbidden",
-            detail: "You do not have permission to access this resource.",
-            message: "User tried to access resource without permission"
+    describe("toJSON filtering mechanism", () => {
+        it("should exclude 'message', 'name' and 'stack' from JSON serialization", () => {
+            const error = new BadRequestError("Test detail");
+            const json = JSON.parse(JSON.stringify(error));
+
+            expect(json.message).toBeUndefined();
+            expect(json.name).toBeUndefined();
+            expect(json.stack).toBeUndefined();
         });
 
-        expect(exampleError).toBeInstanceOf(RFC7807Problem);
-        expect(exampleError).toBeInstanceOf(Error);
+        it("should include RFC 7807 standard fields", () => {
+            const error = new BadRequestError("Invalid input", "/api/users/123");
+            const json = JSON.parse(JSON.stringify(error));
 
-        const serializedError = JSON.stringify(exampleError);
-        const deserializedError = JSON.parse(serializedError);
+            expect(json.type).toBe('BAD_REQUEST_ERROR');
+            expect(json.status).toBe(StatusCodes.BAD_REQUEST);
+            expect(json.title).toBe("Bad Request");
+            expect(json.detail).toBe("Invalid input");
+            expect(json.instance).toBe("/api/users/123");
+        });
 
-        // Ensure message property is not present
-        expect(deserializedError).toStrictEqual({
-            status: 403,
-            title: "Forbidden",
-            detail: "You do not have permission to access this resource.",
-            type: "about:blank"
-        })
-    });
+        it("should exclude undefined optional fields", () => {
+            const error = new CustomError("Test", 1);
+            const json = JSON.parse(JSON.stringify(error));
 
-    it("should serialize subclass properties", () => {
-        // An example implementation of an error based on the RFC 7807 problem
-        class CustomError extends RFC7807Problem {
-            public readonly customProperty: string | undefined;
-
-            constructor(customProperty?: string) {
-                super({title: "Custom Error", type: "CUSTOM_ERROR"});
-
-                this.customProperty = customProperty;
-            }
-        }
-
-        const myCustomError = new CustomError("This information is useful");
-        const serializedError = JSON.stringify(myCustomError);
-        const deserializedError = JSON.parse(serializedError);
-
-        expect("customProperty" in deserializedError).toBe(true);
-        expect(deserializedError).toStrictEqual({
-            title: "Custom Error",
-            type: "CUSTOM_ERROR",
-            customProperty: "This information is useful"
+            expect(json.detail).toBeUndefined();
+            expect(json.instance).toBeUndefined();
         });
     });
 
-    it("should follow: message > detail > title > type for Error.message", () => {
-        const e1 = new RFC7807Problem({ type: "X" });
-        expect(e1.message).toBe("X");
+    it("should include both RFC 7807 fields and custom fields", () => {
+        const error = new CustomError("test", 123, "Error detail", "/api/test");
+        const json = JSON.parse(JSON.stringify(error));
 
-        const e2 = new RFC7807Problem({ title: "T", type: "X" });
-        expect(e2.message).toBe("T");
+        // RFC 7807 fields
+        expect(json.type).toBe('BAD_REQUEST_ERROR');
+        expect(json.status).toBe(StatusCodes.BAD_REQUEST);
+        expect(json.title).toBe("Custom Error");
+        expect(json.detail).toBe("Error detail");
+        expect(json.instance).toBe("/api/test");
 
-        const e3 = new RFC7807Problem({ detail: "D", title: "T", type: "X" });
-        expect(e3.message).toBe("D");
+        // Custom fields
+        expect(json.customField).toBe("test");
+        expect(json.customNumber).toBe(123);
+    });
 
-        const e4 = new RFC7807Problem({ message: "M", detail: "D", title: "T", type: "X" });
-        expect(e4.message).toBe("M");
+    describe("instanceof checks with subclasses", () => {
+        it("should recognize custom error as instance of RFC7807Problem", () => {
+            const error = new CustomError("test", 1);
+
+            expect(error instanceof RFC7807Problem).toBe(true);
+            expect(isRFC7807Problem(error)).toBe(true);
+        });
+
+        it("should recognize custom error as instance of Error", () => {
+            const error = new CustomError("Test", 1);
+
+            expect(error instanceof Error).toBe(true);
+        });
+
+        it("should not recognize non-RFC7807Problem as RFC7807Problem", () => {
+            const regularError = new Error("Regular error");
+
+            expect(regularError instanceof RFC7807Problem).toBe(false);
+            expect(isRFC7807Problem(regularError)).toBe(false);
+        });
+    });
+
+    describe("message getter", () => {
+        it("should return detail when detail is provided", () => {
+            const error = new CustomError("Test", 1, "Detailed error message");
+
+            expect(error.message).toBe("Detailed error message");
+        });
+
+        it("should return title when detail is not provided", () => {
+            const error = new CustomError("Test", 1);
+            expect(error.message).toBe("Custom Error");
+        });
+    });
+
+    it("should set name to constructor name for custom error", () => {
+        const error = new CustomError("Test", 1);
+
+        expect(error.name).toBe("CustomError");
     });
 });
-

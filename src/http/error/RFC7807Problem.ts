@@ -1,48 +1,48 @@
 import {StatusCodes} from "http-status-codes";
 
-export interface RFC7807Options {
-    /**
-     * @default "about:blank"
-     */
-    type?: string;
-    title?: string;
-    status?: StatusCodes;
-    detail?: string;
-    instance?: string;
-    // Explicit override for Error.message
-    message?: string;
-}
+/**
+ * This type represents all possible error cases which are currently modeled by this library.
+ *
+ * I decided to use these simplified types over the recommended URI format, because I think this way it is easier for the client
+ * to determine which kind of error case it is.
+ */
+export type ProblemType =
+    'BAD_REQUEST_ERROR'
+    | 'NOT_FOUND_ERROR'
+    | 'INTERNAL_SERVER_ERROR'
+    | 'UNPROCESSABLE_ENTITY_ERROR';
 
 /**
- * Represents an <b>RFC 7807 Problem</b> Details error.
- * @see https://datatracker.ietf.org/doc/html/rfc7807
+ * RFC 7807 Problem Details for HTTP APIs implementation.
+ * @see https://www.rfc-editor.org/rfc/rfc7807
  */
-export class RFC7807Problem extends Error {
-    public readonly type: string | undefined;
-    public readonly title: string | undefined;
-    public readonly status: StatusCodes | undefined;
-    public readonly detail: string | undefined;
-    public readonly instance: string | undefined;
+export abstract class RFC7807Problem extends Error {
+    abstract readonly type: ProblemType;
+    abstract readonly status: StatusCodes;
+    abstract readonly title: string;
+    readonly detail?: string;
+    readonly instance?: string;
 
-    public constructor({title, instance, type = "about:blank", status, detail, message}: RFC7807Options) {
-        const errorMessage = message ?? detail ?? title ?? type;
-        super(errorMessage);
+    protected constructor(detail?: string, instance?: string) {
+        super(detail ?? "Unknown error");
 
-        this.name = "RFC7807Problem";
-        this.title = title;
+        this.name = this.constructor.name;
         this.instance = instance;
-        this.type = type;
-        this.status = status;
         this.detail = detail;
 
-        Object.setPrototypeOf(this, RFC7807Problem.prototype);
+        Object.defineProperty(this, 'message', {
+            get: () => this.detail ?? this.title,
+            configurable: false,
+            enumerable: true
+        });
 
-        // Better stack traces in V8
-        if (typeof Error.captureStackTrace === "function") {
-            Error.captureStackTrace(this, this.constructor);
-        }
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 
+    /**
+     * JSON.stringify() uses the toJSON fn of an object (if existing) to build the JSON string.
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#description
+     */
     public toJSON(): Record<string, unknown> {
         const serializedProperties: Record<string, unknown> = {};
 
@@ -65,6 +65,6 @@ export class RFC7807Problem extends Error {
     }
 }
 
-export function isRFC7807Problem(value: unknown): value is RFC7807Problem {
-    return value instanceof RFC7807Problem;
+export function isRFC7807Problem(error: unknown): error is RFC7807Problem {
+    return error instanceof RFC7807Problem;
 }

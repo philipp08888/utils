@@ -9,6 +9,7 @@
     "watch": "rollup --config rollup.config.ts --configPlugin typescript -w",
     "lint": "eslint .",
     "test": "jest",
+    "test:ci": "jest --runInBand",
     "format": "prettier . --write"
   },
   "files": [

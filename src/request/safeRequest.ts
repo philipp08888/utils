@@ -1,10 +1,17 @@
-import {Result} from "../monad";
-import {Dispatcher, request, errors} from "undici";
-import {URL, UrlObject} from "node:url";
+import { Result } from "../monad";
+import { Dispatcher, request, errors } from "undici";
+import { URL, UrlObject } from "node:url";
 
-type RequestOptions<T> = { dispatcher?: Dispatcher } & Omit<Dispatcher.RequestOptions<T>, 'origin' | 'path' | 'method'> & Partial<Pick<Dispatcher.RequestOptions, 'method'>>;
+type RequestOptions<T> = { dispatcher?: Dispatcher } & Omit<
+  Dispatcher.RequestOptions<T>,
+  "origin" | "path" | "method"
+> &
+  Partial<Pick<Dispatcher.RequestOptions, "method">>;
 
-export async function safeRequest<T = null>(url: string | URL | UrlObject, options?: RequestOptions<T>): Promise<Result<errors.UndiciError | Error, Dispatcher.ResponseData<T>>> {
+export async function safeRequest<T = null>(
+  url: string | URL | UrlObject,
+  options?: RequestOptions<T>,
+): Promise<Result<errors.UndiciError | Error, Dispatcher.ResponseData<T>>> {
   try {
     const response = await request(url, options);
     return Result.success(response);

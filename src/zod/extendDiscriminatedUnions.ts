@@ -10,17 +10,17 @@ import { z, ZodDiscriminatedUnionOption, ZodRawShape } from "zod";
  */
 export function extendDiscriminatedUnions<
   Discriminator extends string,
-  Options extends Array<z.ZodDiscriminatedUnionOption<Discriminator>>
+  Options extends Array<z.ZodDiscriminatedUnionOption<Discriminator>>,
 >(
   discriminatedUnion: z.ZodDiscriminatedUnion<Discriminator, Options>,
   extendUnion: (
-    value: z.ZodDiscriminatedUnionOption<Discriminator>
-  ) => z.ZodObject<ZodRawShape>
+    value: z.ZodDiscriminatedUnionOption<Discriminator>,
+  ) => z.ZodObject<ZodRawShape>,
 ): z.ZodDiscriminatedUnion<
   Discriminator,
   [
     z.ZodDiscriminatedUnionOption<Discriminator>,
-    ...z.ZodDiscriminatedUnionOption<Discriminator>[]
+    ...z.ZodDiscriminatedUnionOption<Discriminator>[],
   ]
 > {
   const options = discriminatedUnion.options;
@@ -30,7 +30,7 @@ export function extendDiscriminatedUnions<
     discriminatedUnion.discriminator,
     updatedOptions as [
       ZodDiscriminatedUnionOption<Discriminator>,
-      ...ZodDiscriminatedUnionOption<Discriminator>[]
-    ]
+      ...ZodDiscriminatedUnionOption<Discriminator>[],
+    ],
   );
 }

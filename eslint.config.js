@@ -2,6 +2,7 @@ import js from "@eslint/js";
 import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
 import tseslint from "typescript-eslint";
+import eslintConfigPrettier from "eslint-config-prettier";
 
 export default defineConfig([
   {
@@ -13,7 +14,7 @@ export default defineConfig([
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
     languageOptions: { globals: globals.browser },
   },
-  globalIgnores(["dist/**"]),
+  globalIgnores(["dist/**", "coverage/**"]),
   tseslint.configs.recommended,
   {
     files: ["**/*.{ts,mts,cts}"],
@@ -27,4 +28,5 @@ export default defineConfig([
       ],
     },
   },
+  eslintConfigPrettier,
 ]);

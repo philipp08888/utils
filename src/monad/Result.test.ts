@@ -26,7 +26,7 @@ describe("Result Monad", () => {
       const result = Result.success(obj);
 
       expect(() => result.unwrapErr()).toThrow(
-        "Cannot unwrapErr on Success result"
+        "Cannot unwrapErr on Success result",
       );
     });
 
@@ -94,7 +94,7 @@ describe("Result Monad", () => {
 
       expect(result.isFailure()).toBe(true);
       expect(() => result.unwrap()).toThrow(
-        "Called unwrap on a Failure result:"
+        "Called unwrap on a Failure result:",
       );
     });
 

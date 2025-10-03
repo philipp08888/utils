@@ -1,6 +1,6 @@
 {
   "name": "@philipp08888/utils",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "A utility package with useful TypeScript types and functions.",
   "type": "module",
   "main": "src/index.ts",

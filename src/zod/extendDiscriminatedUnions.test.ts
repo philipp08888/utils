@@ -8,21 +8,21 @@ describe("extendDiscriminatedUnions", () => {
 
   it("should extend all options with an additional property", () => {
     const extendedUnion = extendDiscriminatedUnions(union, (option) =>
-      option.extend({ extra: z.boolean() })
+      option.extend({ extra: z.boolean() }),
     );
 
     expect(
-      extendedUnion.parse({ type: "a", value: "foo", extra: true })
+      extendedUnion.parse({ type: "a", value: "foo", extra: true }),
     ).toEqual({ type: "a", value: "foo", extra: true });
 
     expect(extendedUnion.parse({ type: "b", value: 42, extra: false })).toEqual(
-      { type: "b", value: 42, extra: false }
+      { type: "b", value: 42, extra: false },
     );
   });
 
   it("should throw if required properties are missing", () => {
     const extendedUnion = extendDiscriminatedUnions(union, (option) =>
-      option.extend({ extra: z.boolean() })
+      option.extend({ extra: z.boolean() }),
     );
 
     expect(() => extendedUnion.parse({ type: "a", value: "foo" })).toThrow();

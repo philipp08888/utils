@@ -1,3 +1,8 @@
+type MatcherOptions<E, V, R> = {
+  onSuccess: (value: V) => R;
+  onFailure: (error: E) => R;
+};
+
 abstract class ResultBase<E, V> {
   /**
    * Discriminator property to distinguish between success and failure states.
@@ -52,8 +57,20 @@ abstract class ResultBase<E, V> {
   abstract unwrapErr(): E;
 
   abstract map<U>(fn: (value: V) => U): Result<E, U>;
+
   abstract flatMap<U>(fn: (value: V) => Result<E, U>): Result<E, U>;
+
   abstract mapOnError<F>(fn: (error: E) => F): Result<F, V>;
+
+  /**
+   * Transforms the Result into a value of type R by applying one of two functions
+   * based on whether the Result is success or failure.
+   *
+   * @typeParam R - The return type of both matcher functions.
+   * @param options Matcher for each case (success, failure)
+   * @returns The result of applying the appropriate matcher function
+   */
+  abstract match<R>(options: MatcherOptions<E, V, R>): R;
 }
 
 class Success<E, V> extends ResultBase<E, V> {
@@ -106,6 +123,10 @@ class Success<E, V> extends ResultBase<E, V> {
   mapOnError<F>(_fn: (error: E) => F): Result<F, V> {
     return new Success<F, V>(this.value);
   }
+
+  match<R>(options: MatcherOptions<E, V, R>): R {
+    return options.onSuccess(this.value);
+  }
 }
 
 class Failure<E, V> extends ResultBase<E, V> {
@@ -157,6 +178,10 @@ class Failure<E, V> extends ResultBase<E, V> {
 
   mapOnError<F>(fn: (error: E) => F): Result<F, V> {
     return new Failure<F, V>(fn(this.error));
+  }
+
+  match<R>(options: MatcherOptions<E, V, R>): R {
+    return options.onFailure(this.error);
   }
 }
 

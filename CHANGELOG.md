@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/philipp08888/utils/compare/v2.0.0...v2.1.0) (2025-10-31)
+
+
+### Features
+
+* add matcher function for result monad ([#17](https://github.com/philipp08888/utils/issues/17)) ([8980ba6](https://github.com/philipp08888/utils/commit/8980ba6ad9881b9cb9b097b54224d33682363781))
+
 # [2.0.0](https://github.com/philipp08888/utils/compare/v1.4.0...v2.0.0) (2025-10-03)
 
 ### chore

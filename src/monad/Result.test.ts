@@ -73,15 +73,15 @@ describe("Result Monad", () => {
     });
 
     it("should return the success value when using matcher", () => {
-        const result = Result.success<Error, string>("Klaus");
-        expect(result.isSuccess()).toBe(true);
+      const result = Result.success<Error, string>("Klaus");
+      expect(result.isSuccess()).toBe(true);
 
-        const value = result.match({
-            onFailure: (error) => `Error: ${error.message}`,
-            onSuccess: (value) => `Name is ${value}`
-        });
+      const value = result.match({
+        onFailure: (error) => `Error: ${error.message}`,
+        onSuccess: (value) => `Name is ${value}`,
+      });
 
-        expect(value).toEqual("Name is Klaus");
+      expect(value).toEqual("Name is Klaus");
     });
   });
 
@@ -152,16 +152,16 @@ describe("Result Monad", () => {
       expect(transformFn).not.toHaveBeenCalled();
     });
 
-      it("should return the failure value when using matcher", () => {
-          const result = Result.failure<Error, string>(new Error("Failure"));
-          expect(result.isFailure()).toBe(true);
+    it("should return the failure value when using matcher", () => {
+      const result = Result.failure<Error, string>(new Error("Failure"));
+      expect(result.isFailure()).toBe(true);
 
-          const value = result.match({
-              onFailure: (error) => `Error: ${error.message}`,
-              onSuccess: (value) => `Name is ${value}`
-          });
-
-          expect(value).toEqual("Error: Failure");
+      const value = result.match({
+        onFailure: (error) => `Error: ${error.message}`,
+        onSuccess: (value) => `Name is ${value}`,
       });
+
+      expect(value).toEqual("Error: Failure");
+    });
   });
 });

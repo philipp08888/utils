@@ -1,14 +1,12 @@
 # [2.0.0](https://github.com/philipp08888/utils/compare/v1.4.0...v2.0.0) (2025-10-03)
 
-
 ### chore
 
-* trigger release ([#15](https://github.com/philipp08888/utils/issues/15)) ([155e632](https://github.com/philipp08888/utils/commit/155e632ab05c930b4a5a57ae629c5b61fa863bb1))
-
+- trigger release ([#15](https://github.com/philipp08888/utils/issues/15)) ([155e632](https://github.com/philipp08888/utils/commit/155e632ab05c930b4a5a57ae629c5b61fa863bb1))
 
 ### BREAKING CHANGES
 
-* Changed RFC 7807 error classes
+- Changed RFC 7807 error classes
 
 # [1.4.0](https://github.com/philipp08888/utils/compare/v1.3.1...v1.4.0) (2025-10-02)
 
